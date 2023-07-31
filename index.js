@@ -1,37 +1,46 @@
-const http = require("http");
-const fs = require("fs");
+const express = require("express");
+const morgan = require("morgan");
+const server = express();
 
-const index = fs.readFileSync("index.html", "utf-8");
-const data = JSON.parse(fs.readFileSync("data.json", "utf-8"));
-// const product = data.products[0];
+server.use(express.json());
+server.use(morgan("default"));
+server.use(express.static("public"));
 
-const server = http.createServer((req, res) => {
-  if (req.url.startsWith("/product")) {
-    const id = req.url.split("/")[2];
-    const product = data.products[id];
-    res.setHeader("Content-Type", "text/html");
-    let modifiedIndex = index
-      .replace("**title**", product.title)
-      .replace("**rating**", product.rating)
-      .replace("**price**", product.price)
-      .replace("**url**", product.thumbnail);
-    res.end(modifiedIndex);
-    return;
-  }
-  console.log("server started");
-  switch (req.url) {
-    case "/":
-      res.setHeader("Content-Type", "text/html");
-      res.end('<h1>Hello, World!<h1>');
-      break;
-    case "/api":
-      res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify(data));
-      break;
-    default:
-      res.writeHead(404);
-      res.end("Page Not Found");
-  }
+// middleware - application level middleware
+// server.use((req, res, next) => {
+//   console.log(req.hostname, req.ip, new Date(), req.get("User-Agent"));
+//   next();
+// });
+  
+// router-level middleware
+
+// const auth = (req, res, next) => {
+//   console.log(req.query);
+//   req.body - by default not read by express
+//   if (req.body.password === "1234") {
+//     next();
+//   } else {
+//     res.sendStatus(401);
+//   }
+// };
+// server.use(auth)
+
+server.get("/", (req, res) => {
+  res.json({ type: "GET" });
+});
+server.post("/", (req, res) => {
+  res.json({ type: "POST" });
+});
+server.delete("/", (req, res) => {
+  res.json({ type: "DELETE" });
+});
+server.put("/", (req, res) => {
+  res.json({ type: "PUT" });
+});
+server.patch("/", (req, res) => {
+  res.json({ type: "PATCH" });
 });
 
-server.listen(8080);
+server.listen(8080, (req, res) => {
+  console.log("server started");
+});
