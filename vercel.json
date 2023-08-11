@@ -20,11 +20,11 @@
     },
     {
       "src":"/",
-      "dest":"dist/index.html"
+      "dest":"build/index.html"
     },
     {
       "src":"/(.+)",
-      "dest":"dist/$1"
+      "dest":"build/$1"
     }
   ]
 }
