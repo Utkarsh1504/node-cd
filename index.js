@@ -17,9 +17,7 @@ const server = express();
 // db connection
 // mongoose.connect('mongodb://localhost:27017/ecommerceDB')
 const main = async () => {
-  await mongoose.connect(
-    "mongodb+srv://umishra1504:hUGkDXx7swMpf8GG@dbcluster.6jrwtpz.mongodb.net/ecommerceDB2?retryWrites=true&w=majority"
-  );
+  await mongoose.connect(process.env.MONGO_URL);
   console.log("db connected!");
 };
 main().catch((err) => console.log(err));
