@@ -13,17 +13,17 @@ const router = Router();
 // Rest APIs - C R U D
 // Method path type
 
-// Create Post /products
+// Create Post /users
 router.post("/", createUser);
-// Read GET /products
+// Read GET /users
 router.get("/", getAllUsers);
-// Read GET /products/:id
+// Read GET /users/:id
 router.get("/:id", getUser);
-// Update PUT /products/:id - over write existing item
+// Update PUT /users/:id - over write existing item
 router.put("/:id", replaceUser);
-// Update PATCH /products/:id - update in existing items
+// Update PATCH /users/:id - update in existing items
 router.patch("/:id", updateUser);
-// Delete DELETE /products/:id
+// Delete DELETE /users/:id
 router.delete("/:id", deleteUser);
 
 export default router;

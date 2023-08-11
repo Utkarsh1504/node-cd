@@ -1,46 +1,61 @@
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-import { readFileSync } from 'fs';
-import path from 'path';
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const data=JSON.parse(readFileSync(path.join(__dirname, '../model/user.json'), 'utf-8'));
-// import data from "../model/user.json" assert {type:"json"};
-const users = data.users;
+import {User} from "../model/user.js";
 
-export const createUser = (req, res) => {
-  users.push(req.body);
-  res.status(201).json(users);
+export const createUser = async (req, res, next) => {
+  try {
+    const user = new User(req.body);
+    const doc = await user.save();
+    console.log(doc);
+    res.status(201).json({message:"created", doc});
+  } catch (err) {
+    console.error("error", err);
+    res.status(400).json(err);
+  }
 };
 
-export const getAllUsers = (req, res) => {
+export const getAllUsers = async (req, res) => {
+  const users = await User.find();
   res.status(200).json(users);
 };
 
-export const getUser = (req, res) => {
-  const id = +req.params.id;
-  const user = users.find((p) => p.id === id);
+export const getUser = async (req, res) => {
+  const id = req.params.id;
+  const user = await User.findById(id);
   res.status(200).json(user);
 };
 
-export const replaceUser = (req, res) => {
-  const id = +req.params.id;
-  const userIndex = users.findIndex((p) => p.id === id);
-  users.splice(userIndex, 1, { ...req.body, id: id });
-  res.status(200).json({ message: "successfully updated" });
+export const replaceUser = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const doc = await User.findOneAndReplace({ _id: id }, req.body, {
+      new: true,
+    });
+    res.status(200).json({ message: "successfully replace", doc });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(err);
+  }
 };
 
-export const updateUser = (req, res) => {
-  const id = +req.params.id;
-  const userIndex = users.findIndex((p) => p.id === id);
-  const user = users[userIndex];
-  users.splice(userIndex, 1, { ...user, ...req.body });
-  res.status(200).json({ message: "successfully updated" });
+export const updateUser = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const doc = await User.findOneAndUpdate({ _id: id }, req.body, {
+      new: true,
+    });
+    res.status(200).json({ message: "successfully modified", doc });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(err);
+  }
 };
 
-export const deleteUser = (req, res) => {
-  const id = +req.params.id;
-  const userIndex = users.findIndex((p) => p.id === id);
-  const user = users[userIndex];
-  users.splice(userIndex, 1);
-  res.status(200).json(user);
+export const deleteUser = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const doc = await User.findOneAndDelete({ _id: id });
+    res.status(200).json({message:"deleted", doc});
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(err);
+  }
 };
