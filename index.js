@@ -29,7 +29,7 @@ server.use(express.urlencoded({ extended: true }));
 server.use("/products", productRouter);
 server.use("/users", userRouter);
 server.use("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "dist", "index.html"));
+  res.sendFile(path.resolve(__dirname, "build", "index.html"));
 });
 
 server.listen(process.env.PORT, (req, res) => {
