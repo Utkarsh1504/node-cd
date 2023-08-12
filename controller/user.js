@@ -1,16 +1,4 @@
-import {User} from "../model/user.js";
-
-export const createUser = async (req, res, next) => {
-  try {
-    const user = new User(req.body);
-    const doc = await user.save();
-    console.log(doc);
-    res.status(201).json({message:"created", doc});
-  } catch (err) {
-    console.error("error", err);
-    res.status(400).json(err);
-  }
-};
+import { User } from "../model/user.js";
 
 export const getAllUsers = async (req, res) => {
   const users = await User.find();

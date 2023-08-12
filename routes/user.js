@@ -1,6 +1,5 @@
 import { Router } from "express";
 import {
-  createUser,
   deleteUser,
   getAllUsers,
   getUser,
@@ -12,9 +11,8 @@ const router = Router();
 
 // Rest APIs - C R U D
 // Method path type
-
 // Create Post /users
-router.post("/", createUser);
+// router.post("/", createUser);
 // Read GET /users
 router.get("/", getAllUsers);
 // Read GET /users/:id
